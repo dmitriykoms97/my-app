@@ -1,0 +1,29 @@
+.nav {
+    grid-area: n;
+    background-color: rgba(18, 97, 1, 0.25);
+    margin-top: 20px;
+    width: 150px;
+    height: 300px;
+    border-radius: 20px;
+}
+
+.item {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 20px;
+}
+
+.item a {
+    color: black;
+    text-decoration: none;
+}
+
+.item a:hover {
+    color: #247901;
+    transition: .3s linear;
+}
+
+.item a.activeLink {
+    color: #247901;
+    font-weight: bold;
+}
