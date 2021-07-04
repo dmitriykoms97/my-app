@@ -1,14 +1,21 @@
 import React, {Component} from 'react';
-import {postPageType, postsType} from '../../../redux/state';
+import {
+    ActionsTypes,
+    addPostActionCreator,
+    postPageType,
+    postsType,
+    updateNewPostTextActionCreator
+} from '../../../redux/state';
 import s from './MyPosts.module.css'
 import Post from './Post/Post';
 
 type myPostPropsType = {
     state: postPageType
-    addPost: () => void
-    updateNewPostText: (newText: string) => void
     newPostText: string
+    dispatch: (action: ActionsTypes) => void
 }
+
+
 
 const MyPosts = (props: myPostPropsType) => {
 
@@ -19,14 +26,14 @@ const MyPosts = (props: myPostPropsType) => {
     let addPost = () => {
         if(newPostElement.current) {
             let text = newPostElement.current?.value;
-            props.addPost();
+            props.dispatch(addPostActionCreator());
         }
     }
 
     const onPostChange = () => {
         if(newPostElement.current) {
             let text = newPostElement.current?.value;
-            props.updateNewPostText(text);
+            props.dispatch(updateNewPostTextActionCreator(text));
         }
 
     }
