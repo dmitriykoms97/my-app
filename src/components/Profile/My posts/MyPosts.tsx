@@ -35,7 +35,6 @@ const MyPosts = (props: myPostPropsType) => {
             let text = newPostElement.current?.value;
             props.dispatch(updateNewPostTextActionCreator(text));
         }
-
     }
 
     return <div>

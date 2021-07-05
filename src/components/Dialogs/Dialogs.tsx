@@ -2,11 +2,19 @@ import React, {Component} from 'react';
 import s from './Dialogs.module.css';
 import DialogsItem from "./DialogItem/DialogItem";
 import Message from './Message/Message';
-import {dialogPageType, dialogsPropsType, messagePropsType} from '../../redux/state';
+import {
+    ActionsTypes, addMessageActionCreator,
+    addPostActionCreator,
+    dialogPageType,
+    dialogsPropsType,
+    messagePropsType, updateNewMessageTextActionCreator, updateNewPostTextActionCreator
+} from '../../redux/state';
 
 
 type PropsType = {
     state: dialogPageType
+    newMessageText: string
+    dispatch: (action: ActionsTypes) => void
 }
 
 const Dialogs = (props: PropsType) => {
@@ -20,7 +28,17 @@ const Dialogs = (props: PropsType) => {
     let newMessageElement = React.createRef<HTMLTextAreaElement>()
 
     const sendMessage = () => {
-        alert(newMessageElement.current?.value)
+        if(newMessageElement.current) {
+            let text = newMessageElement.current?.value;
+            props.dispatch(addMessageActionCreator());
+        }
+    }
+
+    const onMessageChange = () => {
+        if(newMessageElement.current) {
+            let text = newMessageElement.current?.value;
+            props.dispatch(updateNewMessageTextActionCreator(text));
+        }
     }
 
     return (
@@ -32,7 +50,7 @@ const Dialogs = (props: PropsType) => {
                 <div className={s.messages}>
                     {messagesElements}
                     <div className={s.inputMessageBlock}>
-                        <textarea className={s.inputMessage} ref={newMessageElement}></textarea>
+                        <textarea className={s.inputMessage} onChange={onMessageChange} ref={newMessageElement} value={props.newMessageText}/>
                         <button className={s.sendMessage} onClick={sendMessage}>SEND</button>
                     </div>
 

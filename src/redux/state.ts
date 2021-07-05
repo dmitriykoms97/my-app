@@ -1,5 +1,7 @@
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
+const ADD_MESSAGE = 'ADD-MESSAGE';
+const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE_NEW_MESSAGE_TEXT';
 
 export type postsType = {
     id: number
@@ -27,6 +29,7 @@ export type messagePropsType = {
 export type dialogPageType = {
     dialogsData: Array<dialogsPropsType>
     messageData: Array<messagePropsType>
+    newMessageText: string
 }
 
 export type RootStateType = {
@@ -34,7 +37,10 @@ export type RootStateType = {
     dialogsPage: dialogPageType
 }
 
-export type ActionsTypes = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPostTextActionCreator>
+export type ActionsTypes = ReturnType<typeof addPostActionCreator> |
+    ReturnType<typeof updateNewPostTextActionCreator> |
+    ReturnType<typeof addMessageActionCreator> |
+    ReturnType<typeof updateNewMessageTextActionCreator>
 
 export const addPostActionCreator = () => {
     return {
@@ -45,6 +51,19 @@ export const addPostActionCreator = () => {
 export const updateNewPostTextActionCreator = (newText: string) => {
     return {
         type: UPDATE_NEW_POST_TEXT,
+        newText: newText
+    } as const
+}
+
+export const addMessageActionCreator = () => {
+    return {
+        type: ADD_MESSAGE,
+    } as const
+}
+
+export const updateNewMessageTextActionCreator = (newText: string) => {
+    return {
+        type: UPDATE_NEW_MESSAGE_TEXT,
         newText: newText
     } as const
 }
@@ -81,7 +100,8 @@ let store: StoreType = {
                 {id: 2, message: 'How are you?', avatar: 'https://i.pinimg.com/736x/64/a8/8f/64a88f80d6b5a43b58d14c20c7ef4b89.jpg'},
                 {id: 3, message: 'Go playing in football...', avatar: 'https://cdn.freelance.ru/images/att/1324133_900_600.png'},
                 {id: 4, message: 'bla bla bla', avatar: 'https://i.pinimg.com/736x/64/a8/8f/64a88f80d6b5a43b58d14c20c7ef4b89.jpg'}
-            ]
+            ],
+            newMessageText: ''
         }
     },
     _callSubscriber() {
@@ -107,6 +127,18 @@ let store: StoreType = {
             this._callSubscriber();
         } else if (action.type === UPDATE_NEW_POST_TEXT) {
             this._state.profilePage.newPostText = action.newText;
+            this._callSubscriber();
+        } else if (action.type === ADD_MESSAGE) {
+            let newMessage: messagePropsType = {
+                id: 7,
+                message: this._state.dialogsPage.newMessageText,
+                avatar: 'https://cdn.freelance.ru/images/att/1324133_900_600.png'
+            }
+            this._state.dialogsPage.messageData.push(newMessage)
+            this._state.dialogsPage.newMessageText = '';
+            this._callSubscriber();
+        } else if (action.type === UPDATE_NEW_MESSAGE_TEXT) {
+            this._state.dialogsPage.newMessageText = action.newText;
             this._callSubscriber();
         }
     }
