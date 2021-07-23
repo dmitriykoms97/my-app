@@ -1,9 +1,8 @@
-const ADD_POST = 'ADD-POST';
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
-const ADD_MESSAGE = 'ADD-MESSAGE';
-const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE_NEW_MESSAGE_TEXT';
+import profileReducer, {addPostActionCreator, updateNewPostTextActionCreator} from "./profile-reducer";
+import dialogsReducer, {addMessageActionCreator, updateNewMessageTextActionCreator} from "./dialogs-reducer";
+import sidebarReducer from "./sidebar-reducer";
 
-export type postsType = {
+type postsType = {
     id: number
     message: string
     likeCount: number
@@ -14,13 +13,13 @@ export type postPageType = {
     newPostText: string
 }
 
-export type dialogsPropsType = {
+type dialogsPropsType = {
     id: number
     name: string
     avatar: string
 }
 
-export type messagePropsType = {
+type messagePropsType = {
     id: number
     message: string
     avatar: string
@@ -32,9 +31,14 @@ export type dialogPageType = {
     newMessageText: string
 }
 
+export type sidebarType = {
+
+}
+
 export type RootStateType = {
     profilePage: postPageType
     dialogsPage: dialogPageType
+    sidebar: sidebarType
 }
 
 export type ActionsTypes = ReturnType<typeof addPostActionCreator> |
@@ -42,36 +46,10 @@ export type ActionsTypes = ReturnType<typeof addPostActionCreator> |
     ReturnType<typeof addMessageActionCreator> |
     ReturnType<typeof updateNewMessageTextActionCreator>
 
-export const addPostActionCreator = () => {
-    return {
-        type: ADD_POST
-    } as const
-}
-
-export const updateNewPostTextActionCreator = (newText: string) => {
-    return {
-        type: UPDATE_NEW_POST_TEXT,
-        newText: newText
-    } as const
-}
-
-export const addMessageActionCreator = () => {
-    return {
-        type: ADD_MESSAGE,
-    } as const
-}
-
-export const updateNewMessageTextActionCreator = (newText: string) => {
-    return {
-        type: UPDATE_NEW_MESSAGE_TEXT,
-        newText: newText
-    } as const
-}
-
 export type StoreType = {
     _state: RootStateType
-    _callSubscriber: () => void
-    subscribe: (observer: () => void) => void
+    _callSubscriber: (state: RootStateType) => void
+    subscribe: (observer: (() => void)) => void
     getState: () => RootStateType
     dispatch: (action: ActionsTypes) => void
 }
@@ -102,7 +80,8 @@ let store: StoreType = {
                 {id: 4, message: 'bla bla bla', avatar: 'https://i.pinimg.com/736x/64/a8/8f/64a88f80d6b5a43b58d14c20c7ef4b89.jpg'}
             ],
             newMessageText: ''
-        }
+        },
+        sidebar: {}
     },
     _callSubscriber() {
         console.log('State changed!');
@@ -116,31 +95,10 @@ let store: StoreType = {
     },
 
     dispatch(action) {
-        if (action.type === ADD_POST) {
-            let newPost: postsType = {
-                id: 5,
-                message: this._state.profilePage.newPostText,
-                likeCount: 0
-            }
-            this._state.profilePage.postsData.unshift(newPost)
-            this._state.profilePage.newPostText = '';
-            this._callSubscriber();
-        } else if (action.type === UPDATE_NEW_POST_TEXT) {
-            this._state.profilePage.newPostText = action.newText;
-            this._callSubscriber();
-        } else if (action.type === ADD_MESSAGE) {
-            let newMessage: messagePropsType = {
-                id: 7,
-                message: this._state.dialogsPage.newMessageText,
-                avatar: 'https://cdn.freelance.ru/images/att/1324133_900_600.png'
-            }
-            this._state.dialogsPage.messageData.push(newMessage)
-            this._state.dialogsPage.newMessageText = '';
-            this._callSubscriber();
-        } else if (action.type === UPDATE_NEW_MESSAGE_TEXT) {
-            this._state.dialogsPage.newMessageText = action.newText;
-            this._callSubscriber();
-        }
+        this._state.profilePage = profileReducer(this._state.profilePage, action)
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action)
+        this._callSubscriber(this._state);
     }
 }
 
