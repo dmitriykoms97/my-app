@@ -1,5 +1,3 @@
-import React from "react";
-
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET-USERS'
@@ -78,7 +76,7 @@ const usersReducer = (state: InitialStateType = initialState, action: ActionType
                     return u;
                 })]
             };
-        case SET_USERS: {
+        case "SET-USERS": {
             return {...state, users: [...state.users, ...action.users]}
         }
         default:
@@ -87,17 +85,23 @@ const usersReducer = (state: InitialStateType = initialState, action: ActionType
     }
 }
 
-export const followAC = (userId: number) => ({
-    type: FOLLOW,
-    userId
-})
-export const unfollowAC = (userId: number) => ({
-    type: UNFOLLOW,
-    userId
-})
-export const setUsersAC = (users: UserDataType) => ({
-    type: SET_USERS,
-    users
-})
+export const followAC = (userId: number) => {
+    return {
+        type: FOLLOW,
+        userId
+    } as const
+}
+export const unfollowAC = (userId: number) => {
+    return {
+        type: UNFOLLOW,
+        userId
+    } as const
+}
+export const setUsersAC = (users: Array<UserDataType>) => {
+    return {
+        type: SET_USERS,
+        users
+    } as const
+}
 
 export default usersReducer;
