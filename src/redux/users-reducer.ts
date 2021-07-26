@@ -7,8 +7,9 @@ type LocationType = {
     country: string
 }
 
-type UserDataType = {
+export type UserDataType = {
     id: number
+    photoUrl: string
     followed: boolean
     fullName: string
     status: string
@@ -23,6 +24,7 @@ let initialState = {
     users: [
         {
             id: 1,
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
             followed: true,
             fullName: 'Dmitriy',
             status: 'i want to be programmer',
@@ -30,6 +32,7 @@ let initialState = {
         },
         {
             id: 2,
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
             followed: true,
             fullName: 'Juliya',
             status: 'i`m a good nurse',
@@ -37,6 +40,7 @@ let initialState = {
         },
         {
             id: 3,
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
             followed: false,
             fullName: 'Artem',
             status: 'Unity the best',
@@ -44,6 +48,7 @@ let initialState = {
         },
         {
             id: 4,
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
             followed: false,
             fullName: 'Oleksiy',
             status: 'want to be a coach of Olympic Champion',

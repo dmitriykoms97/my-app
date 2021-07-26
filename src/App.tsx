@@ -9,7 +9,7 @@ import Music from "./components/Music/Music";
 import News from "./components/News/News";
 import Settings from "./components/Settings/Settings";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
-import Users from "./components/Users/Users";
+import UsersContainer from "./components/Users/UsersContainer";
 
 /*type PropsType = {
     state: RootStateType
@@ -29,7 +29,7 @@ const App = () => {
                     <Route path='/Profile'
                            render={() => <Profile />}/>
                     <Route path='/Users'
-                           render={() => <Users />}/>
+                           render={() => <UsersContainer />}/>
                     <Route path='/News' component={News}/>
                     <Route path='/Music' component={Music}/>
                     <Route path='/Settings' component={Settings}/>
