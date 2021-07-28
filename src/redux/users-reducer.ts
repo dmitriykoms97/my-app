@@ -7,11 +7,16 @@ type LocationType = {
     country: string
 }
 
+type PhotosType = {
+    small: string
+    large: string
+}
+
 export type UserDataType = {
     id: number
-    photoUrl: string
+    photos: PhotosType
     followed: boolean
-    fullName: string
+    name: string
     status: string
     location: LocationType
 }
@@ -21,40 +26,7 @@ type ActionTypes = ReturnType<typeof followAC> |
     ReturnType<typeof setUsersAC>
 
 let initialState = {
-    users: [
-        {
-            id: 1,
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
-            followed: true,
-            fullName: 'Dmitriy',
-            status: 'i want to be programmer',
-            location: {city: 'Horishni Plavni', country: 'Ukraine'}
-        },
-        {
-            id: 2,
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
-            followed: true,
-            fullName: 'Juliya',
-            status: 'i`m a good nurse',
-            location: {city: 'Horishni Plavni', country: 'Ukraine'}
-        },
-        {
-            id: 3,
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
-            followed: false,
-            fullName: 'Artem',
-            status: 'Unity the best',
-            location: {city: 'Kiev', country: 'Ukraine'}
-        },
-        {
-            id: 4,
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
-            followed: false,
-            fullName: 'Oleksiy',
-            status: 'want to be a coach of Olympic Champion',
-            location: {city: 'Horishni Plavni', country: 'Ukraine'}
-        },
-    ] as Array<UserDataType>
+    users: [] as Array<UserDataType>
 }
 
 type InitialStateType = typeof initialState

@@ -1,6 +1,8 @@
+import axios from 'axios';
 import React from 'react';
 import {UserDataType} from "../../redux/users-reducer";
 import s from './users.module.css'
+import userUnknownPhoto from '../../assets/img/user.png';
 
 type PropsType = {
     users: Array<UserDataType>
@@ -12,40 +14,12 @@ type PropsType = {
 const Users = (props: PropsType) => {
 
     if (props.users.length === 0) {
-        props.setUsers([
-            {
-                id: 1,
-                photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
-                followed: true,
-                fullName: 'Dmitriy',
-                status: 'i want to be programmer',
-                location: {city: 'Horishni Plavni', country: 'Ukraine'}
-            },
-            {
-                id: 2,
-                photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
-                followed: true,
-                fullName: 'Juliya',
-                status: 'i`m a good nurse',
-                location: {city: 'Horishni Plavni', country: 'Ukraine'}
-            },
-            {
-                id: 3,
-                photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
-                followed: false,
-                fullName: 'Artem',
-                status: 'Unity the best',
-                location: {city: 'Kiev', country: 'Ukraine'}
-            },
-            {
-                id: 4,
-                photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Dmitry_Nagiev_2017_4.jpg/274px-Dmitry_Nagiev_2017_4.jpg',
-                followed: false,
-                fullName: 'Oleksiy',
-                status: 'want to be a coach of Olympic Champion',
-                location: {city: 'Horishni Plavni', country: 'Ukraine'}
-            },
-        ])
+
+        axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response => {
+            //@ts-ignore
+            props.setUsers(response.data.items)
+        })
+
     }
 
     return (
@@ -54,7 +28,7 @@ const Users = (props: PropsType) => {
 
                 <span>
                     <div>
-                        <img src={u.photoUrl} alt='efwefqefq' className={s.photo}/>
+                        <img src={u.photos.small != null ? u.photos.small : userUnknownPhoto} alt='' className={s.photo}/>
                     </div>
                     <div>
                         { u.followed
@@ -65,7 +39,7 @@ const Users = (props: PropsType) => {
                 <span>
                     <span>
                         <div>
-                            {u.fullName}
+                            {u.name}
                         </div>
                         <div>
                             {u.status}
@@ -73,10 +47,10 @@ const Users = (props: PropsType) => {
                     </span>
                     <span>
                         <div>
-                            {u.location.city}
+                            {'u.location.city'}
                         </div>
                         <div>
-                            {u.location.country}
+                            {'u.location.country'}
                         </div>
                     </span>
                 </span>
