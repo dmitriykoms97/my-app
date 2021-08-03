@@ -1,42 +1,59 @@
-import axios from 'axios';
 import React from 'react';
+import s from "./users.module.css";
+import userUnknownPhoto from "../../assets/img/user.png";
 import {UserDataType} from "../../redux/users-reducer";
-import s from './users.module.css'
-import userUnknownPhoto from '../../assets/img/user.png';
+import { NavLink } from 'react-router-dom';
 
 type PropsType = {
-    users: Array<UserDataType>
+    totalUsersCount: number
+    pageSize: number
+    onPageChanged: (pageNumber: number) => void
     follow: (userId: number) => void
     unfollow: (userId: number) => void
-    setUsers: (users: Array<UserDataType>) => void
+    users: Array<UserDataType>
+    currentPage: number
 }
 
 const Users = (props: PropsType) => {
 
-    let getUsers = () => {
-        if (props.users.length === 0) {
+    let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
 
-            axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response => {
-                //@ts-ignore
-                props.setUsers(response.data.items)
-            })
-
-        }
+    let pages = [];
+    for (let i = 1; i <= pagesCount; i++) {
+        pages.push(i)
     }
+
 
     return (
         <div>
-            <button onClick={getUsers}>GET USERS</button>
+            <div>
+                {pages.map(p => {
+                    //@ts-ignore
+                    return <span className={props.currentPage === p && s.selectedPage}
+                                 onClick={(e) => {
+                                     props.onPageChanged(p)
+                                 }}>{p}</span>
+                })}
+
+
+            </div>
             {props.users.map(u => <div key={u.id}>
 
                 <span>
                     <div>
-                        <img src={u.photos.small != null ? u.photos.small : userUnknownPhoto} alt='' className={s.photo}/>
+                        <NavLink to={'/profile/' + u.id}>
+                        <img src={u.photos.small != null ? u.photos.small : userUnknownPhoto} alt=''
+                             className={s.photo}/>
+                            </NavLink>
                     </div>
                     <div>
-                        { u.followed
-                            ? <button onClick={() => {props.unfollow(u.id)}}>UNFOLLOW</button>
-                            : <button onClick={() => {props.follow(u.id)}}>Follow</button>}
+                        {u.followed
+                            ? <button onClick={() => {
+                                props.unfollow(u.id)
+                            }}>UNFOLLOW</button>
+                            : <button onClick={() => {
+                                props.follow(u.id)
+                            }}>Follow</button>}
                     </div>
                 </span>
                 <span>
@@ -58,8 +75,7 @@ const Users = (props: PropsType) => {
                     </span>
                 </span>
             </div>)}
-        </div>
-    );
+        </div>)
 };
 
 export default Users;

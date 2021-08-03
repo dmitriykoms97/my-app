@@ -1,4 +1,4 @@
-import profileReducer, {addPostActionCreator, updateNewPostTextActionCreator} from "./profile-reducer";
+import profileReducer, {addPostActionCreator, setUserProfile, updateNewPostTextActionCreator} from "./profile-reducer";
 import dialogsReducer, {addMessageActionCreator, updateNewMessageTextActionCreator} from "./dialogs-reducer";
 import sidebarReducer from "./sidebar-reducer";
 
@@ -11,6 +11,7 @@ type postsType = {
 export type postPageType = {
     postsData: Array<postsType>
     newPostText: string
+    profile: any
 }
 
 type dialogsPropsType = {
@@ -44,7 +45,8 @@ export type RootStateType = {
 export type ActionsTypes = ReturnType<typeof addPostActionCreator> |
     ReturnType<typeof updateNewPostTextActionCreator> |
     ReturnType<typeof addMessageActionCreator> |
-    ReturnType<typeof updateNewMessageTextActionCreator>
+    ReturnType<typeof updateNewMessageTextActionCreator> |
+    ReturnType<typeof setUserProfile>
 
 export type StoreType = {
     _state: RootStateType
@@ -64,7 +66,8 @@ let store: StoreType = {
                 {id: 2, message: 'Its my first post!', likeCount: 45},
                 {id: 2, message: 'Its my first post!', likeCount: 45}
             ],
-            newPostText: ''
+            newPostText: '',
+            profile: null
         },
         dialogsPage: {
             dialogsData: [

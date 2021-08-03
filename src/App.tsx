@@ -10,6 +10,7 @@ import News from "./components/News/News";
 import Settings from "./components/Settings/Settings";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import UsersContainer from "./components/Users/UsersContainer";
+import ProfileContainer from "./components/Profile/ProfileContainer";
 
 /*type PropsType = {
     state: RootStateType
@@ -27,7 +28,7 @@ const App = () => {
                     <Route path='/Dialogs'
                            render={() => <DialogsContainer />}/>
                     <Route path='/Profile'
-                           render={() => <Profile />}/>
+                           render={() => <ProfileContainer />}/>
                     <Route path='/Users'
                            render={() => <UsersContainer />}/>
                     <Route path='/News' component={News}/>
