@@ -8,3 +8,7 @@
     padding: 2px 50px;
     width: 55px;
 }
+
+.loginBlock {
+    float: right;
+}
