@@ -1,3 +1,5 @@
+import {authAPI} from "../api/api";
+
 const SET_USER_DATA = 'SET_USER_DATA'
 
 export type ActionTypes = ReturnType<typeof setAuthUserData>
@@ -9,7 +11,12 @@ let initialState = {
     isAuth: false
 }
 
-type InitialStateType = typeof initialState
+type InitialStateType = {
+    id: number | null
+    email: string | null,
+    login:  string | null,
+    isAuth: boolean
+}
 
 const authReducer = (state: InitialStateType = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
@@ -25,7 +32,7 @@ const authReducer = (state: InitialStateType = initialState, action: ActionTypes
     }
 }
 
-export const setAuthUserData = (id: any, email: any, login: any, isAuth: boolean) => {
+export const setAuthUserData = (id: number, email: string, login: string, isAuth: boolean) => {
     return {
         type: SET_USER_DATA,
         data: {
@@ -35,6 +42,16 @@ export const setAuthUserData = (id: any, email: any, login: any, isAuth: boolean
             isAuth
         }
     } as const
+}
+
+export const getAuthUserData = () => (dispatch: any) => {
+    authAPI.me()
+        .then(response => {
+            if(response.data.resultCode === 0) {
+                let {id, login, email, isAuth} = response.data.data
+                dispatch(setAuthUserData(id, email, login, isAuth))
+            }
+        })
 }
 
 

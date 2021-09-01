@@ -1,4 +1,5 @@
 import {addMessageActionCreator, updateNewMessageTextActionCreator} from "./dialogs-reducer";
+import {usersAPI} from "../api/api";
 
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
@@ -67,6 +68,12 @@ export const setUserProfile = (profile: any) => {
         type: SET_USER_PROFILE,
         profile
     } as const
+}
+
+export const getUserProfile = (userID: number) => (dispatch: (action: ProfileActionsTypes) => void) => {
+    usersAPI.getProfile(userID).then(response => {
+        dispatch(setUserProfile(response.data));
+    })
 }
 
 

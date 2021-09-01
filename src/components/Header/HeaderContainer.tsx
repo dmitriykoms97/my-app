@@ -1,24 +1,20 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Header from "./Header";
-import axios from "axios";
 import {connect} from "react-redux";
-import {setAuthUserData} from "../../redux/auth-reducer";
+import {getAuthUserData} from "../../redux/auth-reducer";
 import {AppStateType} from "../../redux/redux-store";
+import {withRouter} from "react-router-dom";
 
-class HeaderContainer extends React.Component  {
+type PropsType = {
+    getAuthUserData: () => (dispatch: any) => void
+    isAuth: boolean
+    login: any
+}
+
+class HeaderContainer extends React.Component<PropsType>  {
 
     componentDidMount() {
-        axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`,
-            {
-                withCredentials: true
-            })
-            .then(response => {
-               if(response.data.resultCode === 0) {
-                   let {id, login, email} = response.data.data
-                   //@ts-ignore
-                   this.props.setAuthUserData(id, email, login)
-               }
-            })
+        this.props.getAuthUserData()
     }
 
     render() {
@@ -32,4 +28,7 @@ const mapStateToProps = (state: AppStateType) => ({
     login: state.auth.login
 });
 
-export default connect(mapStateToProps, {setAuthUserData})(HeaderContainer);
+//@ts-ignore
+let WithUrlDataContainerHeaderComponent = withRouter(HeaderContainer)
+
+export default connect(mapStateToProps, {getAuthUserData})(WithUrlDataContainerHeaderComponent);

@@ -4,6 +4,7 @@ import DialogsItem from "./DialogItem/DialogItem";
 import Message from './Message/Message';
 import {dialogPageType} from "../../redux/store";
 import {dialogsPropsType, messagePropsType} from "../../redux/dialogs-reducer";
+import { Redirect } from 'react-router-dom';
 
 
 type PropsType = {
@@ -11,6 +12,7 @@ type PropsType = {
     onMessageChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
     dialogsPage: dialogPageType
     newMessageText: string
+    isAuth: boolean
 }
 
 const Dialogs = (props: PropsType) => {
@@ -26,6 +28,7 @@ const Dialogs = (props: PropsType) => {
                  key={m.id}
                  message={m.message}
                  avatar={m.avatar}/>)
+
 
     return (
         <div>

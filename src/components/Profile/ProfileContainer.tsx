@@ -1,28 +1,31 @@
 import React from 'react';
 import Profile from "./Profile";
-import axios from "axios";
 import {connect} from "react-redux";
-import {setUserProfile} from "../../redux/profile-reducer";
+import {getUserProfile} from "../../redux/profile-reducer";
 import {AppStateType} from "../../redux/redux-store";
-import { withRouter } from 'react-router-dom';
+import {Redirect, RouteComponentProps, withRouter} from 'react-router-dom';
+import {withAuthRedirect} from "../../hoc/WithAuthRedirect";
+import {compose} from "redux";
 
 type PropsType = {
-    setUserProfile: (profile: any) => void
+    getUserProfile: (userID: number) => (profile: any) => void
     profile: any
+    isAuth: boolean
 }
+type PathParamsType = {
+    userId: string
+}
+type ProfileContainerPropsType = RouteComponentProps<PathParamsType> & PropsType
 
-class ProfileContainer extends React.Component<PropsType> {
+class ProfileContainer extends React.Component<ProfileContainerPropsType> {
 
     componentDidMount() {
-        //@ts-ignore
-        let userId = this.props.match.params.userId;
-        if(!userId) {
-            userId = 2;
+        let userID = Number(this.props.match.params.userId);
+        if(!userID) {
+            debugger
+            userID = 2;
         }
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/` + userId)
-            .then(response => {
-                this.props.setUserProfile(response.data)
-            })
+        this.props.getUserProfile(userID)
     }
 
     render() {
@@ -34,11 +37,12 @@ class ProfileContainer extends React.Component<PropsType> {
 
 let mapStateToProps = (state: AppStateType) => (
     {
-        profile: state.profilePage.profile
+        profile: state.profilePage.profile,
     }
 )
-//@ts-ignore
-let WithUrlDataContainerComponent = withRouter(ProfileContainer)
 
-export default connect(mapStateToProps, {setUserProfile})(WithUrlDataContainerComponent);
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, {getUserProfile}),
+    withRouter
+)(ProfileContainer)
 
