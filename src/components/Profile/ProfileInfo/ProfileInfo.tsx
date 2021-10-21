@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import s from './ProfileInfo.module.css'
 import Preloader from "../../common/preloader/Preloader";
-import ProfileStatus from './ProfileStatus'
+import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
 
 type PropsType = {
     profile: any
+    updateUserStatus: (status: string) => (profile: any) => void
+    status: string
 }
 
 const ProfileInfo = (props: PropsType) => {
@@ -13,15 +15,13 @@ const ProfileInfo = (props: PropsType) => {
         return <Preloader />
     }
 
-    const status = 'Hello'
-
     return <div>
         <div className={s.backImg}>
             <img src='https://static3.depositphotos.com/1000454/256/i/600/depositphotos_2567474-stock-photo-wide-panorama-of-french-alps.jpg'/>
         </div>
         <div className={s.descriptionBlock}>
             <img src={props.profile.photos.large} />
-            <ProfileStatus status={status}/>
+            <ProfileStatusWithHooks status={props.status} updateUserStatus={props.updateUserStatus}/>
         </div>
     </div>
 }

@@ -1,38 +1,40 @@
-import React, {ChangeEvent} from 'react';
-import {ActionsTypes, dialogPageType, StoreType} from "../../redux/store";
-import {addMessageActionCreator, updateNewMessageTextActionCreator} from "../../redux/dialogs-reducer";
+import React from 'react';
+import {
+    addMessageActionCreator,
+    dialogsPropsType, messagePropsType,
+} from "../../redux/dialogs-reducer";
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
 import {AppStateType} from "../../redux/redux-store";
 import {compose, Dispatch} from 'redux';
 import {withAuthRedirect} from "../../hoc/WithAuthRedirect";
 
+export type DialogPageType = {
+    dialogsData: Array<dialogsPropsType>
+    messageData: Array<messagePropsType>
+}
+
 type MapStateToPropsType = {
-    dialogsPage: dialogPageType
-    newMessageText: string
+    dialogsPage: DialogPageType
+    isAuth: boolean
 }
 
 type mapDispatchToPropsType = {
-    sendMessage: () => void
-    onMessageChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
+    sendMessage: (newMessageText: string) => void
 }
 
 let mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     return {
         dialogsPage: state.dialogsPage,
-        newMessageText: state.dialogsPage.newMessageText,
+        isAuth: state.auth.isAuth
     }
 }
 
 let mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
     return {
-        sendMessage: () => {
-                dispatch(addMessageActionCreator());
+        sendMessage: (newMessageText: string) => {
+                dispatch(addMessageActionCreator(newMessageText));
         },
-        onMessageChange: (e: ChangeEvent<HTMLTextAreaElement>) => {
-                let text = e.target.value;
-                dispatch(updateNewMessageTextActionCreator(text));
-        }
     }
 }
 

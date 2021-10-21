@@ -1,5 +1,3 @@
-import {ActionsTypes} from "./store";
-
 const ADD_MESSAGE = 'ADD-MESSAGE';
 const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE_NEW_MESSAGE_TEXT';
 
@@ -28,45 +26,36 @@ const initialState = {
         {id: 3, message: 'Go playing in football...', avatar: 'https://cdn.freelance.ru/images/att/1324133_900_600.png'},
         {id: 4, message: 'bla bla bla', avatar: 'https://i.pinimg.com/736x/64/a8/8f/64a88f80d6b5a43b58d14c20c7ef4b89.jpg'}
     ] as Array<messagePropsType>,
-    newMessageText: ''
 }
 
 export type InitialStateType = typeof initialState
 
-const dialogsReducer = (state: InitialStateType = initialState, action: ActionsTypes): InitialStateType => {
+type DialogsActionsTypes =
+    ReturnType<typeof addMessageActionCreator>
+
+
+const dialogsReducer = (state: InitialStateType = initialState, action: DialogsActionsTypes): InitialStateType => {
 
     switch (action.type) {
         case ADD_MESSAGE:
             let newMessage: messagePropsType = {
                 id: 7,
-                message: state.newMessageText,
+                message: action.newMessageText,
                 avatar: 'https://cdn.freelance.ru/images/att/1324133_900_600.png'
             }
             return {
                 ...state,
-                newMessageText: '',
                 messageData: [...state.messageData, newMessage]
             }
-        case UPDATE_NEW_MESSAGE_TEXT:
-            return {
-                ...state,
-                newMessageText: action.newText
-            };
         default:
             return state;
     }
 }
 
-export const addMessageActionCreator = () => {
+export const addMessageActionCreator = (newMessageText: string) => {
     return {
         type: ADD_MESSAGE,
-    } as const
-}
-
-export const updateNewMessageTextActionCreator = (newText: string) => {
-    return {
-        type: UPDATE_NEW_MESSAGE_TEXT,
-        newText: newText
+        newMessageText
     } as const
 }
 

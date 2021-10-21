@@ -1,5 +1,5 @@
-import {addMessageActionCreator, updateNewMessageTextActionCreator} from "./dialogs-reducer";
-import {usersAPI} from "../api/api";
+import {addMessageActionCreator} from "./dialogs-reducer";
+import {profileAPI, usersAPI} from "../api/api";
 
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
@@ -19,8 +19,8 @@ let initialState = {
         {id: 2, message: 'Its my first post!', likeCount: 45},
         {id: 2, message: 'Its my first post!', likeCount: 45}
     ] as Array<postsType>,
-    newPostText: '',
     profile: null,
+    status: '',
 }
 
 export type InitialStateType = typeof initialState
@@ -30,37 +30,36 @@ const profileReducer = (state: InitialStateType = initialState, action: ProfileA
         case ADD_POST:
             let newPost: postsType = {
                 id: 5,
-                message: state.newPostText,
+                message: action.newPostText,
                 likeCount: 0
             }
             return {
                 ...state,
                 postsData: [newPost, ...state.postsData],
-                newPostText: '',
-            };
-        case UPDATE_NEW_POST_TEXT:
-            return {
-                ...state,
-                newPostText: action.newText
             };
         case SET_USER_PROFILE: {
             return {...state, profile: action.profile}
         }
+        case "SET_STATUS": {
+            return {
+                ...state,
+                status: action.status
+            }
+        }
+        case 'DELETE_POST':
+            return {...state,
+                    postsData: state.postsData.filter(p => p.id !== action.postId)
+            }
+
         default:
             return state;
     }
 }
 
-export const addPostActionCreator = () => {
+export const addPostActionCreator = (newPostText: string) => {
     return {
-        type: ADD_POST
-    } as const
-}
-
-export const updateNewPostTextActionCreator = (newText: string) => {
-    return {
-        type: UPDATE_NEW_POST_TEXT,
-        newText: newText
+        type: ADD_POST,
+        newPostText,
     } as const
 }
 export const setUserProfile = (profile: any) => {
@@ -69,18 +68,41 @@ export const setUserProfile = (profile: any) => {
         profile
     } as const
 }
+export const setStatus = (status: string) => {
+    return {
+        type: 'SET_STATUS',
+        status
+    } as const
+}
+export const deletePost = (postId: number) => {
+    return {
+        type: 'DELETE_POST',
+        postId
+    } as const
+}
 
-export const getUserProfile = (userID: number) => (dispatch: (action: ProfileActionsTypes) => void) => {
-    usersAPI.getProfile(userID).then(response => {
+export const getUserProfile = (userID: number) => async (dispatch: (action: ProfileActionsTypes) => void) => {
+    let response = await usersAPI.getProfile(userID)
         dispatch(setUserProfile(response.data));
-    })
+}
+
+export const getUserStatus = (userID: number) => async (dispatch: (action: ProfileActionsTypes) => void) => {
+    let response = await profileAPI.getStatus(userID)
+        dispatch(setStatus(response.data));
+}
+
+export const updateUserStatus = (status: string) => async (dispatch: (action: ProfileActionsTypes) => void) => {
+    let response =  await profileAPI.updateStatus(status)
+        if(response.data.resultCode === 0) {
+            dispatch(setStatus(status));
+        }
 }
 
 
 export type ProfileActionsTypes = ReturnType<typeof addPostActionCreator> |
-    ReturnType<typeof updateNewPostTextActionCreator> |
     ReturnType<typeof addMessageActionCreator> |
-    ReturnType<typeof updateNewMessageTextActionCreator> |
-    ReturnType<typeof setUserProfile>
+    ReturnType<typeof setUserProfile> |
+    ReturnType<typeof setStatus> |
+    ReturnType<typeof deletePost>
 
 export default profileReducer;
