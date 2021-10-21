@@ -4,7 +4,7 @@ import Paginator from "./paginator/Paginator";
 import User from "./User";
 
 type PropsType = {
-    totalUsersCount: number
+    totalItemsCount: number
     pageSize: number
     onPageChanged: (pageNumber: number) => void
     follow: (userId: number) => void
@@ -15,11 +15,18 @@ type PropsType = {
 }
 
 const Users = (props: PropsType) => {
+    debugger
+
+    const portionSize = 10;
 
     return (
         <div>
-            <Paginator totalUsersCount={props.totalUsersCount} pageSize={props.pageSize}
-                       onPageChanged={props.onPageChanged} currentPage={props.currentPage}/>
+            <Paginator totalItemsCount={props.totalItemsCount}
+                       pageSize={props.pageSize}
+                       onPageChanged={props.onPageChanged}
+                       currentPage={props.currentPage}
+                       portionSize={portionSize}
+            />
             {
                 props.users.map(u => <User key={u.id}
                                            users={u}

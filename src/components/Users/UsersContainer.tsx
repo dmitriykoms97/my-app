@@ -25,7 +25,7 @@ type PropsType = {
     follow: (userId: number) => void
     unfollow: (userId: number) => void
     pageSize: number,
-    totalUsersCount: number
+    totalItemsCount: number
     currentPage: number
     setCurrentPage: (pageNumber: number) => void
     isFetching: boolean
@@ -46,7 +46,7 @@ class UsersContainer extends React.Component<PropsType> {
     render() {
         return <>
             {this.props.isFetching ? <Preloader/> : null}
-            <Users totalUsersCount={this.props.totalUsersCount}
+            <Users totalItemsCount={this.props.totalItemsCount}
                    pageSize={this.props.pageSize}
                    currentPage={this.props.currentPage}
                    onPageChanged={this.onPageChanged}
@@ -64,7 +64,7 @@ let mapStateToProps = (state: AppStateType) => {
     return {
         users: getUsers(state),
         pageSize: getPageSize(state),
-        totalUsersCount: getTotalUsersCount(state),
+        totalItemsCount: getTotalUsersCount(state),
         currentPage: getCurrentPage(state),
         isFetching: getIsFetching(state),
         followingInProgress: getFollowingInProgress(state),
