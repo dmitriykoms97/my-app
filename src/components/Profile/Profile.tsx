@@ -8,12 +8,21 @@ type PropsType = {
     profile: any
     updateUserStatus: (status: string) => (profile: any) => void
     status: string
+    isOwner: boolean
+    savePhoto: any
+    saveProfile: any
 }
 
 const Profile = (props: PropsType) => {
     return <div className={s.content}>
-        <ProfileInfo profile={props.profile} status={props.status} updateUserStatus={props.updateUserStatus}/>
-        <MyPostsContainer />
+        <ProfileInfo profile={props.profile}
+                     status={props.status}
+                     updateUserStatus={props.updateUserStatus}
+                     isOwner={props.isOwner}
+                     savePhoto={props.savePhoto}
+                     saveProfile={props.saveProfile}
+        />
+        <MyPostsContainer/>
     </div>
 }
 

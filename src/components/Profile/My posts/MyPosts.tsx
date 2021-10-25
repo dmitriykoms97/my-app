@@ -22,7 +22,7 @@ const MyPosts = React.memo((props: myPostPropsType) => {
 
     console.log('Render MyPosts')
 
-    let postElements = props.posts.map((p: postsType) => <Post id={p.id} message={p.message}
+    let postElements = props.posts.map((p: postsType) => <Post key={p.id} id={p.id} message={p.message}
                                                                likeCount={p.likeCount}/>)
 
     let addNewPost = (data: AddPostPropsType) => {
